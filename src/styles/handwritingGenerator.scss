@@ -1,0 +1,17 @@
+.page {
+	width: 500px;
+	height: 652px;
+	background: url("https://i.stack.imgur.com/GLuVN.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	img {
+		height: 25px;
+	}
+}
+form {
+	textarea {
+		height: 100px;
+		width: 300px;
+		resize: none;
+	}
+}
