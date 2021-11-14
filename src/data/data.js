@@ -44,4 +44,11 @@ export const defaultInput = {
 	main: '',
 };
 
+export const areaLength = {
+	topRight: 62,
+	title: 417,
+	margin: 62,
+	main: 417,
+};
+
 export default characters;

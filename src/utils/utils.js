@@ -12,7 +12,7 @@ export const getCharacters = () => {
 				position: "relative",
 				height: "15.5px",
 				top: topOffsetCharacters.includes(character) ? "10px" : "3px",
-				margin: "0px 0.5px",
+				margin: "0px 0.5px"
 			},
 		};
 	});

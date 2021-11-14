@@ -15,7 +15,8 @@
 		grid-template-rows: 70px 632px;
 		column-gap: 5px;
 		.pageArea {
-			padding: 0px 0.25rem;
+			overflow: hidden;
+			padding: 0px 4px;
 		}
 		.blink {
 			display: inline-block;
@@ -46,11 +47,12 @@
 		textarea {
 			display: block;
 			outline: none;
-			border: 2px solid #4e9f3d;
+			border: 1px solid #4e9f3d;
 			color: #d8e9a8;
 			box-shadow: 0px 0px 10px black;
+			transition: all 0.5s linear;
 			&:focus {
-				box-shadow: 0px 0px 20px black;
+				box-shadow: 0px 0px 30px black;
 			}
 		}
 		input {
@@ -60,7 +62,6 @@
 			width: 120px;
 			border-radius: 9999px;
 			font-weight: bold;
-			transition: all 0.5s ease;
 			&:hover {
 				background: transparent;
 			}
@@ -70,7 +71,6 @@
 			height: 650px;
 			grid-template-columns: 20% 80%;
 			grid-template-rows: 15% 85%;
-			gap: 0.5rem;
 			textarea {
 				width: 100%;
 				font-family: "Segoe UI";
