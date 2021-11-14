@@ -1,17 +1,94 @@
-.page {
-	width: 500px;
-	height: 652px;
-	background: url("https://i.stack.imgur.com/GLuVN.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	img {
-		height: 25px;
+.container {
+	display: grid;
+	grid-template-columns: 500px auto;
+	gap: 1rem;
+	padding: 1rem;
+	.page {
+		width: 500px;
+		height: 701.5px;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		margin: auto;
+		box-shadow: 0px 0px 30px black;
+		display: grid;
+		grid-template-columns: 70px 425px;
+		grid-template-rows: 70px 632px;
+		column-gap: 5px;
+		.pageArea {
+			padding: 0px 0.25rem;
+		}
+		.blink {
+			display: inline-block;
+			width: 2px;
+			height: 15.5px;
+			background: black;
+			position: relative;
+			top: 3px;
+			margin: 0px 0.5px;
+			animation: blink 1s infinite;
+		}
+		@keyframes blink {
+			0% {
+				opacity: 1;
+			}
+			50% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+	}
+	form {
+		height: 701.5px;
+		padding: 0px 0.5rem;
+		input,
+		textarea {
+			display: block;
+			outline: none;
+			border: 2px solid #4e9f3d;
+			color: #d8e9a8;
+			box-shadow: 0px 0px 10px black;
+			&:focus {
+				box-shadow: 0px 0px 20px black;
+			}
+		}
+		input {
+			margin: 1rem auto;
+			background: #1e5128;
+			height: 35px;
+			width: 120px;
+			border-radius: 9999px;
+			font-weight: bold;
+			transition: all 0.5s ease;
+			&:hover {
+				background: transparent;
+			}
+		}
+		.textAreas {
+			display: grid;
+			height: 650px;
+			grid-template-columns: 20% 80%;
+			grid-template-rows: 15% 85%;
+			gap: 0.5rem;
+			textarea {
+				width: 100%;
+				font-family: "Segoe UI";
+				resize: none;
+				background: transparent;
+				font-size: 1rem;
+				padding: 0.5rem;
+			}
+		}
 	}
 }
-form {
-	textarea {
-		height: 100px;
-		width: 300px;
-		resize: none;
+@media (min-width: 512px) and (max-width: 1048px) {
+	.container {
+		grid-template-columns: 100%;
+	}
+}
+@media (min-width: 0px) and (max-width: 556px) {
+	.container {
+		display: none;
 	}
 }

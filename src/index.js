@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import HandwritingGenerator from "./components/HandwritingGenerator";
+import App from "./App";
+import './styles/global.scss';
 
 ReactDOM.render(
     <React.StrictMode>
-        <HandwritingGenerator />
+        <App />
     </React.StrictMode>,
     document.getElementById("root")
 );

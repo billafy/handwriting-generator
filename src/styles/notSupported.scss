@@ -1,0 +1,19 @@
+.notSupported {
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	color: #d8e9a8;
+	margin: 3rem 1rem;
+	svg {
+		font-size: 3rem;
+	}
+	h1 {
+		text-align: center;
+		font-family: "Segoe UI";
+	}
+}
+@media (min-width: 0px) and (max-width: 556px) {
+	.notSupported {
+		display: flex;
+	}
+}

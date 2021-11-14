@@ -1,70 +1,82 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "../styles/handwritingGenerator.scss";
-import characters from "../data/characters";
+import { getCharacters, saveSnapshot } from "../utils/utils";
+import { defaultInput, defaultContent } from "../data/data";
+import PageArea from "./PageArea";
+
+const characters = getCharacters();
 
 const HandwritingGenerator = () => {
-	const [input, setInput] = useState("");
-	const [pageContent, setPageContent] = useState([]);
-	const characterRef = useRef([]);
+	const pageRef = useRef(null);
+	const [input, setInput] = useState(defaultInput);
+	const [pageContent, setPageContent] = useState(defaultContent);
+	const [blink, setBlink] = useState("main");
 
-	const handleInput = ({ target: { value } }) => {
-		if(input.length === 0 && value === ' ') 
-			return;
-		if (value.length < input.length) {
-			const dif = input.length - value.length;
-			setPageContent(pageContent.slice(0, pageContent.length - dif));
-			setInput(input.slice(0, input.length - dif));
-			return;
-		}
-		const character = value.at(-1);
-		setPageContent([
-			...pageContent,
-			{
-				char: characters[character],
-				style: {
-					position: "relative",
-					top: "62px",
-					left: `${
-						pageContent.length > 0
-							? Number(
-									pageContent
-										.at(-1)
-										.style.left.slice(
-											0,
-											pageContent.at(-1).style.left
-												.length - 3
-										)
-							  ) + 110
-							: 120
-					}px`,
+	const appendCharacter = (char, name) => {
+		if (!characters[char]) return;
+		setPageContent((_pageContent) => {
+			_pageContent[name] = [
+				..._pageContent[name],
+				{
+					char: characters[char].image,
+					style: characters[char].style,
 				},
-			},
-		]);
-		setInput(value);
+			];
+			return {..._pageContent};
+		});
 	};
 
-	useEffect(() => {
-		/* let widths = '';
-		characterRef.current.forEach(ref => widths += ' ' + ref.width)
-		console.log(widths); */
-	}, [characterRef.current.length])
+	const handleInput = ({ target: { value, name } }) => {
+		setPageContent((_pageContent) => {
+			_pageContent[name] = [];
+			return {..._pageContent};
+		});
+		const newValue = [...value];
+		newValue.forEach((char) => appendCharacter(char, name));
+		setInput(_input => {
+			_input[name] = value;
+			return _input;
+		});
+	};
 
 	return (
-		<div>
-			<div className="page">
-				{pageContent.map((character, index) => {
+		<div className="container">
+			<div
+				className="page"
+				style={{ backgroundImage: "url(/alphabets/page.png)" }}
+				ref={pageRef}
+			>
+				{Object.keys(defaultContent).map((type) => {
 					return (
-						<img
-							key={index}
-							src={character.char}
-							style={character.style}
-							ref={e => characterRef.current[index] = e}
+						<PageArea
+							content={pageContent[type]}
+							type={type}
+							blink={blink}
+							key={type}
 						/>
 					);
 				})}
 			</div>
 			<form>
-				<textarea value={input} onChange={handleInput} />
+				<div className='textAreas'>
+					{Object.keys(defaultInput).map((type) => {
+						return (
+							<textarea
+								key={type}
+								value={input[type]}
+								onChange={handleInput}
+								onFocus={({target: {name}}) => setBlink(name)}
+								name={type}
+								placeholder={`${type.toUpperCase()}`}
+							/>	
+						)
+					})}
+				</div>
+				<input
+					type="button"
+					onClick={() => saveSnapshot(pageRef.current)}
+					value="Save"
+				/>
 			</form>
 		</div>
 	);
