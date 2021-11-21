@@ -1,18 +1,20 @@
-import characters, { topOffsetCharacters } from "../data/data";
+import characterList from "../data/data";
 import { toPng } from "html-to-image";
 
 /* fetches the characters and sets the styling for each */
 
+const characterSize = 13;
+
 export const getCharacters = () => {
 	const characterMap = {};
-	characters.forEach((character) => {
+	Object.keys(characterList).forEach((character) => {
 		characterMap[character] = {
-			image: `/alphabets/${character === " " ? "" : character}-sm.png`,
+			image: `/alphabets/${characterList[character].filename}-sm.png`,
 			style: {
 				position: "relative",
-				height: "15.5px",
-				top: topOffsetCharacters.includes(character) ? "10px" : "3px",
-				margin: "0px 0.5px"
+				height: characterSize,
+				top: `${3 + characterList[character].topOffset}px`,
+				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,
 			},
 		};
 	});
@@ -23,8 +25,7 @@ export const getCharacters = () => {
 
 const snapshotOptions = {
 	filter: (node) => {
-		if(node.classList.contains('blink')) 
-			return false;
+		if (node.classList.contains("blink")) return false;
 		return true;
 	},
 	canvasWidth: 2480,
