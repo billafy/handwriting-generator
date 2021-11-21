@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "../styles/handwritingGenerator.scss";
 import { getCharacters, saveSnapshot } from "../utils/utils";
-import { defaultInput, defaultContent, areaLength } from "../data/data";
+import characterList, { defaultInput, defaultContent } from "../data/data";
 import PageArea from "./PageArea";
 
 const characters = getCharacters();
@@ -13,37 +13,23 @@ const HandwritingGenerator = () => {
 	const [content, setContent] = useState(defaultContent);
 	const [blink, setBlink] = useState("main");
 
-	const getContentLength = (type, index) => {
-		let sum = 0;
-		contentRef.current[type].forEach((length, i) => {
-			if(i <= index) 
-				sum += length;
-		})
-		return sum;
-	}
-
-	const getBlankSpaces = (type, index) => {
-		return (areaLength[type] - (getContentLength(type, index) % areaLength[type])) / 10.125;
-	}
+	const getTopOffset = (char, newLines) => {
+		const top = Number(char.style.top.slice(0, char.style.top.length - 2));
+		return `${newLines * 19.5 + top}px`;
+	};
 
 	const setNewContent = (newValue, name) => {
-		let newContent = [];
+		const newContent = [];
+		let newLines = 0;
 		newValue.forEach((char, index) => {
-			if(char === '\n') {
-				const blankSpaces = Math.floor(getBlankSpaces(name, index));
-				console.log(blankSpaces);
-				for(let i = 0; i < blankSpaces; ++i) {
-					newContent.push({
-						char: characters[' '].image,
-						style: characters[' '].style
-					})
-				}
-				return;
-			}
+			if (char === "\n") ++newLines;
 			if (!characters[char]) return;
 			newContent.push({
 				char: characters[char].image,
-				style: characters[char].style,
+				style: {
+					...characters[char].style,
+					top: getTopOffset(characters[char], newLines),
+				},
 			});
 		});
 		setContent((_content) => {
@@ -57,16 +43,15 @@ const HandwritingGenerator = () => {
 			_content[name] = [];
 			return { ..._content };
 		});
-		const newValue = [...value];
+		let newValue = [...value];
+		newValue = newValue.filter(
+			(char) => Object.keys(characterList).includes(char) || char === "\n"
+		);
 		setNewContent(newValue, name);
 		setInput((_input) => {
-			_input[name] = value;
+			_input[name] = newValue.join("");
 			return _input;
 		});
-	};
-
-	const f = () => {
-		console.log(getContentLength('main'));
 	};
 
 	return (
@@ -111,7 +96,6 @@ const HandwritingGenerator = () => {
 					value="Save"
 				/>
 			</form>
-			<input type="button" onClick={f} value="a" />
 		</div>
 	);
 };

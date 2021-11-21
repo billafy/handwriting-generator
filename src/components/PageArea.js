@@ -1,6 +1,6 @@
 import React from "react";
 
-const PageArea = ({ content, type, blink, contentRef }) => {
+const PageArea = ({ content, type, blink, contentRef}) => {
 	const setWidth = (element, index) => {
 		if (!element) contentRef.current[type][index] = 0;
 		else 
