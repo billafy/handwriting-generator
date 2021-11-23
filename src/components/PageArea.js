@@ -26,7 +26,7 @@ const PageArea = ({ content, type, blink, contentRef}) => {
 					/>
 				);
 			})}
-			{blink === type && <div className="blink"></div>}
+			{blink.type === type && <div className="blink" style={{top: blink.position.top, left: blink.position.left}}></div>}
 		</div>
 	);
 };

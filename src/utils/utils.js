@@ -11,6 +11,7 @@ export const getCharacters = () => {
 		characterMap[character] = {
 			image: `/alphabets/${characterList[character].filename}-sm.png`,
 			style: {
+				position: 'absolute',
 				height: characterSize,
 				top: `${3 + characterList[character].topOffset}px`,
 				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,

@@ -6,6 +6,9 @@ body {
 	background: #191a19;
 	margin: 0px;
 }
+button, a, input {
+	cursor: pointer;
+}
 ::-webkit-scrollbar {
 	width: 5px;
 }
