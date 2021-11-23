@@ -3,7 +3,7 @@ import { toPng } from "html-to-image";
 
 /* fetches the characters and sets the styling for each */
 
-const characterSize = 13;
+export const characterSize = 13;
 
 export const getCharacters = () => {
 	const characterMap = {};
@@ -11,7 +11,6 @@ export const getCharacters = () => {
 		characterMap[character] = {
 			image: `/alphabets/${characterList[character].filename}-sm.png`,
 			style: {
-				position: "relative",
 				height: characterSize,
 				top: `${3 + characterList[character].topOffset}px`,
 				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,
@@ -20,6 +19,23 @@ export const getCharacters = () => {
 	});
 	return characterMap;
 };
+
+export const getDummyContent = () => {
+	const dummyContent = [];
+	Object.keys(characterList).forEach(character => {
+		dummyContent.push({
+			char: `/alphabets/${characterList[character].filename}-sm.png`,
+			style: {
+				position: "relative",
+				height: characterSize,
+				top: `${3 + characterList[character].topOffset}px`,
+				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,
+				visibility: 'hidden',
+			},
+		})
+	})
+	return dummyContent;
+}
 
 /* saves snapshot of the page */
 
@@ -42,3 +58,9 @@ export const saveSnapshot = (element) => {
 		})
 		.catch((err) => {});
 };
+
+export const capitalize = (s) => {
+	if(!s || !s[0]) 
+		return s;
+	return `${s[0].toUpperCase()}${s.slice(1, s.length)}`;
+}

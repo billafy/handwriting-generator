@@ -1,26 +1,47 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/handwritingGenerator.scss";
-import { getCharacters, saveSnapshot } from "../utils/utils";
+import { capitalize, getCharacters, saveSnapshot, getDummyContent } from "../utils/utils";
 import characterList, { defaultInput, defaultContent } from "../data/data";
 import PageArea from "./PageArea";
 
+const dummyContent = getDummyContent();
 const characters = getCharacters();
 
 const HandwritingGenerator = () => {
 	const pageRef = useRef(null);
-	const contentRef = useRef(defaultContent);
+	const contentRef = useRef([]);
 	const [input, setInput] = useState(defaultInput);
 	const [content, setContent] = useState(defaultContent);
 	const [blink, setBlink] = useState("main");
+	const [widths, setWidths] = useState({});
 
 	const getTopOffset = (char, newLines) => {
 		const top = Number(char.style.top.slice(0, char.style.top.length - 2));
 		return `${newLines * 19.5 + top}px`;
 	};
 
+	const getLeftOffsets = (newValue) => {
+		let leftOffsets = [0], newLine = false, length = widths[newValue[0]] || 0, lineLength = 0;
+		for(let i = 1; i < newValue.length; ++i) {
+			if(newValue[i] === '\n') {
+				lineLength = 0;
+				newLine = true;
+				continue;
+			}
+			if(!newLine) 
+				leftOffsets.push(0);
+			else 
+				leftOffsets.push(0 - length + lineLength);
+			length += widths[newValue[i]];
+			length %= 417;	
+			lineLength += widths[newValue[i]];
+		}
+		return leftOffsets;
+	}                                                                                
+
 	const setNewContent = (newValue, name) => {
-		const newContent = [];
-		let newLines = 0;
+		const newContent = [], leftOffsets = getLeftOffsets(newValue);
+		let newLines = 0, i = 0;
 		newValue.forEach((char, index) => {
 			if (char === "\n") ++newLines;
 			if (!characters[char]) return;
@@ -29,8 +50,10 @@ const HandwritingGenerator = () => {
 				style: {
 					...characters[char].style,
 					top: getTopOffset(characters[char], newLines),
+					left: leftOffsets[i],
 				},
 			});
+			++i;
 		});
 		setContent((_content) => {
 			_content[name] = newContent;
@@ -54,6 +77,16 @@ const HandwritingGenerator = () => {
 		});
 	};
 
+	useEffect(() => {
+		let newWidths = {};
+		Object.keys(characters).forEach((char, i) => {
+			newWidths[char] = contentRef.current[i];
+		});
+		setWidths(newWidths);
+	}, []);
+
+	const f = () => {};
+
 	return (
 		<div className="container">
 			<div
@@ -68,7 +101,6 @@ const HandwritingGenerator = () => {
 							type={type}
 							blink={blink}
 							key={type}
-							contentRef={contentRef}
 						/>
 					);
 				})}
@@ -85,7 +117,7 @@ const HandwritingGenerator = () => {
 									setBlink(name)
 								}
 								name={type}
-								placeholder={`${type.toUpperCase()}`}
+								placeholder={`${capitalize(type)}`}
 							/>
 						);
 					})}
@@ -96,6 +128,16 @@ const HandwritingGenerator = () => {
 					value="Save"
 				/>
 			</form>
+			<input type="button" onClick={f} />
+			{dummyContent.length && (
+				<PageArea
+					content={dummyContent}
+					type="dummy"
+					blink={false}
+					key="dummy"
+					contentRef={contentRef}
+				/>
+			)}
 		</div>
 	);
 };
