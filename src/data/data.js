@@ -37,7 +37,7 @@ export const characterList = {
 	H: { filename: "h-bg" },
 	I: { filename: "i-bg" },
 	J: { filename: "j-bg" },
-	// K: { filename: "k-bg" },
+	K: { filename: "k-bg" },
 	L: { filename: "l-bg" },
 	M: { filename: "m-bg" },
 	N: { filename: "n-bg" },
