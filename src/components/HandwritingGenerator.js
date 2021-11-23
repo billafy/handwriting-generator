@@ -49,6 +49,8 @@ const HandwritingGenerator = () => {
 	};
 
 	const setNewContent = (newValue, name) => {
+		if(isNaN(widths[' '])) 
+			window.location.reload()
 		const newContent = [];
 		let newLines = 0,
 			length = 4;
