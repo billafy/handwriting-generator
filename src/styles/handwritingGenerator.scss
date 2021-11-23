@@ -58,6 +58,7 @@
 			width: 120px;
 			font-weight: bold;
 			box-shadow: 0px 0px 10px black;
+			transition: all 0.3s linear;
 			&:hover {
 				background: transparent;
 			}
