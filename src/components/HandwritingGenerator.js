@@ -5,11 +5,18 @@ import {
 	getCharacters,
 	saveSnapshot,
 	getDummyContent,
+	getTopOffset,
 } from "../utils/utils";
-import characterList, { defaultInput, defaultContent, areaLength } from "../data/data";
+import {
+	characterList, 
+	defaultInput,
+	defaultContent,
+	areaLength,
+	defaultStats,
+} from "../data/data";
 import PageArea from "./PageArea";
 
-const dummyContent = getDummyContent();
+let dummyContent = getDummyContent();
 const characters = getCharacters();
 
 const HandwritingGenerator = () => {
@@ -17,21 +24,34 @@ const HandwritingGenerator = () => {
 	const contentRef = useRef([]);
 	const [input, setInput] = useState(defaultInput);
 	const [content, setContent] = useState(defaultContent);
-	const [blink, setBlink] = useState({type: "main", position: {top: 3, left: 4}});
+	const [blink, setBlink] = useState({
+		type: "body",
+		position: { top: 3, left: 4 },
+	});
 	const [widths, setWidths] = useState({});
+	const [contentStats, setContentStats] = useState(defaultStats);
 
-	const getTopOffset = (char, newLines) => {
-		let top;
-		if(char === 'blink') 
-			top = 3;
-		else 
-			top = Number(char.style.top.slice(0, char.style.top.length - 2));
-		return `${newLines * 19.5 + top}px`;
+	const updateContent = (type, newContent) => {
+		setContent((_content) => {
+			_content[type] = newContent;
+			return _content;
+		});
+	}
+
+	const updateBlink = (type, stats) => {
+		setBlink({
+			type,
+			position: {
+				top: getTopOffset("blink", stats.newLines),
+				left: stats.length,
+			},
+		});
 	};
 
 	const setNewContent = (newValue, name) => {
 		const newContent = [];
-		let newLines = 0, length = 4;
+		let newLines = 0,
+			length = 4;
 		newValue.forEach((char, index) => {
 			if (char === "\n" || length + widths[char] > areaLength[name]) {
 				++newLines;
@@ -48,18 +68,16 @@ const HandwritingGenerator = () => {
 			});
 			length += widths[char];
 		});
-		setBlink({type: name, position: {top: getTopOffset('blink', newLines), left: length}})
-		setContent((_content) => {
-			_content[name] = newContent;
-			return _content;
-		});
+		setContentStats(_contentStats => {
+			_contentStats[name] = {length, newLines};
+			return _contentStats;
+		})
+		updateContent(name, newContent);
+		updateBlink(name, {length, newLines});
 	};
 
 	const handleInput = ({ target: { value, name } }) => {
-		setContent((_content) => {
-			_content[name] = [];
-			return { ..._content };
-		});
+		updateContent(name, []);
 		let newValue = [...value];
 		newValue = newValue.filter(
 			(char) => Object.keys(characterList).includes(char) || char === "\n"
@@ -105,9 +123,7 @@ const HandwritingGenerator = () => {
 								key={type}
 								value={input[type]}
 								onChange={handleInput}
-								onFocus={({ target: { name } }) =>
-									setBlink({type: name, position: {top: 3, left: 4}})
-								}
+								onFocus={({target: {name}}) => updateBlink(name, contentStats[name])}
 								name={type}
 								placeholder={`${capitalize(type)}`}
 							/>

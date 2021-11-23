@@ -1,20 +1,31 @@
-import characterList from "../data/data";
+import { characterList } from "../data/data";
 import { toPng } from "html-to-image";
 
-/* fetches the characters and sets the styling for each */
+/* character related properties and functions */
 
 export const characterSize = 13;
+export const characterMargin = 0.3;
+const characterTopOffset = 3;
+
+const characterStyles = {
+	position: "absolute",
+	height: characterSize,
+	margin: `${
+		15.5 - characterSize
+	}px ${characterMargin}px 0px ${characterMargin}px`,
+};
 
 export const getCharacters = () => {
 	const characterMap = {};
 	Object.keys(characterList).forEach((character) => {
 		characterMap[character] = {
-			image: `/alphabets/${characterList[character].filename}-sm.png`,
+			image: `/alphabets/${characterList[character].filename}.png`,
 			style: {
-				position: 'absolute',
-				height: characterSize,
-				top: `${3 + characterList[character].topOffset}px`,
-				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,
+				...characterStyles,
+				top: `${
+					characterTopOffset +
+					(characterList[character].topOffset || 0)
+				}px`,
 			},
 		};
 	});
@@ -23,33 +34,36 @@ export const getCharacters = () => {
 
 export const getDummyContent = () => {
 	const dummyContent = [];
-	Object.keys(characterList).forEach(character => {
+	Object.keys(characterList).forEach((character) => {
 		dummyContent.push({
-			char: `/alphabets/${characterList[character].filename}-sm.png`,
+			char: `/alphabets/${characterList[character].filename}.png`,
 			style: {
-				position: "relative",
-				height: characterSize,
-				top: `${3 + characterList[character].topOffset}px`,
-				margin: `${15.5 - characterSize}px 0.5px 0px 0.5px`,
-				visibility: 'hidden',
+				...characterStyles,
+				visibility: "hidden",
 			},
-		})
-	})
+		});
+	});
 	return dummyContent;
-}
+};
+
+export const getTopOffset = (char, newLines) => {
+	let top;
+	if (char === "blink") top = 3;
+	else top = Number(char.style.top.slice(0, char.style.top.length - 2));
+	return `${newLines * 19.5 + top}px`;
+};
 
 /* saves snapshot of the page */
 
-const snapshotOptions = {
-	filter: (node) => {
-		if (node.classList.contains("blink")) return false;
-		return true;
-	},
-	canvasWidth: 2480,
-	canvasHeight: 3508,
-};
-
 export const saveSnapshot = (element) => {
+	const snapshotOptions = {
+		filter: (node) => {
+			if (node.classList.contains("blink")) return false;
+			return true;
+		},
+		canvasWidth: 2480,
+		canvasHeight: 3508,
+	};
 	toPng(element, snapshotOptions)
 		.then((url) => {
 			const link = document.createElement("a");
@@ -60,8 +74,9 @@ export const saveSnapshot = (element) => {
 		.catch((err) => {});
 };
 
+/* miscellanous utility functions */
+
 export const capitalize = (s) => {
-	if(!s || !s[0]) 
-		return s;
+	if (!s || !s[0]) return s;
 	return `${s[0].toUpperCase()}${s.slice(1, s.length)}`;
-}
+};
