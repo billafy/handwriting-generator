@@ -4,7 +4,7 @@ import { toPng } from "html-to-image";
 /* character related properties and functions */
 
 export const characterSize = 13;
-export const characterMargin = 0.3;
+export const characterMargin = 0.5;
 const characterTopOffset = 3;
 
 const characterStyles = {
