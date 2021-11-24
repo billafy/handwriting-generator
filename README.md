@@ -1,13 +1,17 @@
-# Billa Handwriting Generator
+# Handwriting Generator
+A title is self-explanatory. This application generates handwritten characters on a notebook page which you can save as an image.
 
-### Requirements:-
-	1) User must be able to input english alphabets(small and capital both), numbers,
-		punctuation marks, blankspace, etc and the corresponding handwritten character 
-		should be shown properly on a virtual notebook page
-	2) User can freely move the cursor around the page and write wherever desired
-	3) If a line gets filled with characters it should automatically redirect to next line
-	4) The image of the page can be saved locally
-
-### Page specifications
-	
-	
+### File structure
+/public
+	/alphabets - contains all the character images 
+/src
+	/components
+		HandwritingGenerator - The central component which has all the main functionalities
+		Header - application header
+		NotSupported - a simple screen for the devices which are not supported
+		PageArea - the mapping of a specific area of the page
+	/data
+		data - has all the static data such as character filenames, page length, etc
+	/styles - scss styles
+	/utils
+		utils - utility functions to fetch the characters, set margin and size for them, save snapshot of the page, etc
