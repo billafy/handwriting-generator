@@ -103,7 +103,7 @@ const HandwritingGenerator = () => {
 		<div className="container">
 			<div
 				className="page"
-				style={{ backgroundImage: "url(/alphabets/page.png)" }}
+				style={{ backgroundImage: "url(/characters/page.png)" }}
 				ref={pageRef}
 			>
 				{Object.keys(defaultContent).map((type, index) => {
