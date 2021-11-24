@@ -91,6 +91,7 @@ export const characterList = {
 	"@": {filename: "@"},
 	"&": {filename: "&"},
 	"%": {filename: "percentage"},
+	"?": {filename: "question"},
 };
 
 export const defaultContent = {
