@@ -19,7 +19,7 @@ export const getCharacters = () => {
 	const characterMap = {};
 	Object.keys(characterList).forEach((character) => {
 		characterMap[character] = {
-			image: `/alphabets/${characterList[character].filename}.png`,
+			image: `/characters/${characterList[character].filename}.png`,
 			style: {
 				...characterStyles,
 				top: `${
@@ -36,7 +36,7 @@ export const getDummyContent = () => {
 	const dummyContent = [];
 	Object.keys(characterList).forEach((character) => {
 		dummyContent.push({
-			char: `/alphabets/${characterList[character].filename}.png`,
+			char: `/characters/${characterList[character].filename}.png`,
 			style: {
 				...characterStyles,
 				visibility: "hidden",
