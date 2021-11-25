@@ -1,91 +1,126 @@
 .container {
-	display: grid;
-	grid-template-columns: 500px auto;
-	gap: 1rem;
-	padding: 1rem;
-	.page {
-		width: 500px;
-		height: 701.5px;
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
+	.selectPageType {
+		text-align: center;
 		margin: auto;
-		box-shadow: 0px 0px 30px black;
-		display: grid;
-		grid-template-columns: 70px 425px;
-		grid-template-rows: 70px 632px;
-		column-gap: 5px;
-		.pageArea {
-			position: relative;
-			overflow: hidden;
-			padding: 0px 4px;
+		label {
+			color: white;
+			font-family: 'Segoe UI';
+			margin: 0px 0.5rem;
 		}
-		.blink {
-			display: inline-block;
-			width: 2px;
-			height: 15.5px;
-			background: black;
-			position: absolute;
-			top: 3px;
-			margin: 0px 0.5px;
-			animation: blink 1s infinite;
-		}
-		@keyframes blink {
-			0% {
-				opacity: 1;
-			}
-			50% {
-				opacity: 0;
-			}
-			100% {
-				opacity: 1;
+		select {
+			margin: 1rem auto;
+			background: transparent;
+			border: 0px solid #4e9f3d;
+			border-bottom-width: 2px;
+			padding: 0.5rem;
+			color: white;
+			option {
+				background: #191a19;
+				margin: 1px;
 			}
 		}
 	}
-	form {
-		height: 701.5px;
-		padding: 0px 0.5rem;
-		input,
-		textarea {
-			display: block;
-			outline: none;
-			color: #d8e9a8;
-		}
-		input {
-			margin: 1rem auto;
-			background: #1e5128;
-			border: 3px solid #4e9f3d;
-			height: 35px;
-			width: 120px;
-			font-weight: bold;
-			box-shadow: 0px 0px 10px black;
-			transition: all 0.3s linear;
-			&:hover {
-				background: transparent;
+	.page-container {
+		display: grid;
+		grid-template-columns: 500px auto;
+		gap: 1rem;
+		padding: 1rem;
+		.page {
+			width: 500px;
+			height: 701.5px;
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			margin: auto;
+			box-shadow: 0px 0px 30px black;
+			display: grid;
+			column-gap: 5px;
+			.pageArea {
+				position: relative;
+				overflow: hidden;
+				padding: 0px 4px;
+			}
+			.blink {
+				display: inline-block;
+				width: 2px;
+				height: 15.5px;
+				background: black;
+				position: absolute;
+				top: 3px;
+				margin: 0px 0.5px;
+				animation: blink 1s infinite;
+			}
+			@keyframes blink {
+				0% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
 			}
 		}
-		.textAreas {
-			display: grid;
-			height: 650px;
-			grid-template-columns: 20% 80%;
-			grid-template-rows: 15% 85%;
+		.ruled {
+			grid-template-columns: 70px 425px;
+			grid-template-rows: 70px 632px;
+		}
+		.unruled {
+			grid-template-columns: 500px;
+			grid-template-rows: 701.5px;
+		}
+		form {
+			height: 701.5px;
+			padding: 0px 0.5rem;
+			input,
 			textarea {
-				border: 0px solid #4e9f3d;
-				width: 100%;
-				font-family: "Segoe UI";
-				resize: none;
-				background: transparent;
-				font-size: 1rem;
-				padding: 0.5rem;
-				transition: all 0.1s linear;
+				display: block;
+				outline: none;
+				color: #d8e9a8;
+			}
+			input {
+				margin: 1rem auto;
+				background: #1e5128;
+				border: 3px solid #4e9f3d;
+				height: 35px;
+				width: 120px;
+				font-weight: bold;
+				box-shadow: 0px 0px 10px black;
+				transition: all 0.3s linear;
 				&:hover {
-					cursor: pointer;
-					transform: scale(1.003);
+					background: transparent;
 				}
-				&:focus {
-					cursor: text;
-					box-shadow: 0px 0px 50px black;
-					border-width: 3px;
+			}
+			.textAreas {
+				display: grid;
+				height: 650px;
+				textarea {
+					border: 0px solid #4e9f3d;
+					width: 100%;
+					font-family: "Segoe UI";
+					resize: none;
+					background: transparent;
+					font-size: 1rem;
+					padding: 0.5rem;
+					transition: all 0.1s linear;
+					&:hover {
+						cursor: pointer;
+						transform: scale(1.003);
+					}
+					&:focus {
+						cursor: text;
+						box-shadow: 0px 0px 50px black;
+						border-width: 3px;
+					}
 				}
+			}
+			.ruledTextAreas {
+				grid-template-columns: 20% 80%;
+				grid-template-rows: 15% 85%;
+			}
+			.unruledTextAreas {
+				grid-template-columns: 1fr;
+				grid-template-rows: 1fr;
 			}
 		}
 	}

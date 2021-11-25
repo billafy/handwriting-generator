@@ -8,11 +8,8 @@ import {
 	getTopOffset,
 } from "../utils/utils";
 import {
-	characterList, 
-	defaultInput,
-	defaultContent,
-	areaLength,
-	defaultStats,
+	characterList,
+	pages
 } from "../data/data";
 import PageArea from "./PageArea";
 
@@ -22,21 +19,20 @@ const characters = getCharacters();
 const HandwritingGenerator = () => {
 	const pageRef = useRef(null);
 	const contentRef = useRef([]);
-	const [input, setInput] = useState(defaultInput);
-	const [content, setContent] = useState(defaultContent);
+	const [page, setPage] = useState(pages['ruled']);
 	const [blink, setBlink] = useState({
 		type: "body",
 		position: { top: 3, left: 4 },
 	});
 	const [widths, setWidths] = useState({});
-	const [contentStats, setContentStats] = useState(defaultStats);
+	const [backupPage, setBackupPage] = useState(pages['unruled']);
 
-	const updateContent = (type, newContent) => {
-		setContent((_content) => {
-			_content[type] = newContent;
-			return _content;
-		});
-	}
+	const updatePage = (newPage = {content: page.content, input: page.input, stats: page.stats}) => {
+		setPage(_page => {
+			_page[page.type] = {..._page[page.type], ...newPage}
+			return _page;
+		})
+	};
 
 	const updateBlink = (type, stats) => {
 		setBlink({
@@ -53,7 +49,7 @@ const HandwritingGenerator = () => {
 		let newLines = 0,
 			length = 4;
 		newValue.forEach((char, index) => {
-			if (char === "\n" || length + widths[char] > areaLength[name]) {
+			if (char === "\n" || length + widths[char] > page.areaLength[name]) {
 				++newLines;
 				length = 4;
 			}
@@ -66,30 +62,32 @@ const HandwritingGenerator = () => {
 					left: `${length}px`,
 				},
 			});
-			if(isNaN(widths[char])) 
-				return window.location.reload();
+			if (isNaN(widths[char])) return window.location.reload();
 			length += widths[char];
 		});
-		setContentStats(_contentStats => {
-			_contentStats[name] = {length, newLines};
-			return _contentStats;
-		})
-		updateContent(name, newContent);
-		updateBlink(name, {length, newLines});
+		let _content = page.content;
+		_content[name] = newContent;
+		updatePage({content: _content, stats: {length, newLines}});
+		updateBlink(name, { length, newLines });
 	};
 
 	const handleInput = ({ target: { value, name } }) => {
-		updateContent(name, []);
+		updatePage({content: []});
 		let newValue = [...value];
 		newValue = newValue.filter(
 			(char) => Object.keys(characterList).includes(char) || char === "\n"
 		);
 		setNewContent(newValue, name);
-		setInput((_input) => {
-			_input[name] = newValue.join("");
-			return _input;
-		});
+		const _input = page.input;
+		_input[name] = newValue.join('');
+		updatePage({input: _input});
 	};
+
+	const switchPageType = (pageType) => {
+		const prevPage = page;
+		setPage(backupPage);
+		setBackupPage(prevPage);
+	}
 
 	useEffect(() => {
 		let newWidths = {};
@@ -101,43 +99,60 @@ const HandwritingGenerator = () => {
 
 	return (
 		<div className="container">
-			<div
-				className="page"
-				style={{ backgroundImage: "url(/characters/page.png)" }}
-				ref={pageRef}
-			>
-				{Object.keys(defaultContent).map((type, index) => {
-					return (
-						<PageArea
-							content={content[type]}
-							type={type}
-							blink={blink}
-							key={type}
-						/>
-					);
-				})}
+			<div className="selectPageType">
+				<label htmlFor="pageType">Page Type</label>
+				<select
+					value={page.type}
+					onChange={({ target: { value } }) => switchPageType(value)}
+					name="pageType"
+				>
+					<option value="ruled">Ruled Paper</option>
+					<option value="unruled">Unruled Paper</option>
+				</select>
 			</div>
-			<form>
-				<div className="textAreas">
-					{Object.keys(defaultInput).map((type) => {
+			<div className="page-container">
+				<div
+					className={`page ${page.type}`}
+					style={{
+						backgroundImage: `url(/characters/${page.type}.png)`,
+					}}
+					ref={pageRef}
+				>
+					{Object.keys(page.content).map((type, index) => {
 						return (
-							<textarea
+							<PageArea
+								content={page.content[type]}
+								type={type}
+								blink={blink}
 								key={type}
-								value={input[type]}
-								onChange={handleInput}
-								onFocus={({target: {name}}) => updateBlink(name, contentStats[name])}
-								name={type}
-								placeholder={`${capitalize(type)}`}
 							/>
 						);
 					})}
 				</div>
-				<input
-					type="button"
-					onClick={() => saveSnapshot(pageRef.current)}
-					value="Save"
-				/>
-			</form>
+				<form>
+					<div className={`textAreas ${page.type}TextAreas`}>
+						{Object.keys(page.input).map((type) => {
+							return (
+								<textarea
+									key={type}
+									value={page.input[type]}
+									onChange={handleInput}
+									onFocus={({ target: { name } }) =>
+										updateBlink(name, page.stats[name])
+									}
+									name={type}
+									placeholder={`${capitalize(type)}`}
+								/>
+							);
+						})}
+					</div>
+					<input
+						type="button"
+						onClick={() => saveSnapshot(pageRef.current)}
+						value="Save"
+					/>
+				</form>
+			</div>
 			{dummyContent.length && (
 				<PageArea
 					content={dummyContent}
