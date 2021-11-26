@@ -139,14 +139,15 @@ export const pages = {
 			body: "",
 		},
 		areaLength: {
-			body: 496,
+			body: 484,
 		},
 		stats: {
 			body: { length: 4, newLines: 0 },
 		},
 		pageStyle: {
-			gridTemplateColumns: '500px',
-			gridTemplateRows: '701.5px',
+			gridTemplateColumns: '484px',
+			gridTemplateRows: '685.5px',
+			padding: '8px',
 		},
 		textAreaStyle: {
 			gridTemplateColumns: '1fr',

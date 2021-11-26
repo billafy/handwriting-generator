@@ -23,6 +23,7 @@ const HandwritingGenerator = () => {
 	});
 	const [widths, setWidths] = useState({});
 	const [backupPage, setBackupPage] = useState(pages["unruled"]);
+	const [brightness, setBrightness] = useState(0);
 
 	const updatePage = (
 		newPage = {
@@ -50,8 +51,7 @@ const HandwritingGenerator = () => {
 	const getWordWidth = (value, i) => {
 		let width = 0;
 		while (i < value.length) {
-			if(value[i] === '\n' || value[i] === ' ') 
-				break;
+			if (value[i] === "\n" || value[i] === " ") break;
 			width += widths[value[i++]];
 		}
 		return width;
@@ -66,14 +66,21 @@ const HandwritingGenerator = () => {
 		while (i < newValue.length) {
 			const char = newValue[i];
 			let wordWidth = 0;
-			if (![' ', '\n'].includes(char) && [' ', '\n'].includes(newValue[i - 1])) 
+			if (
+				![" ", "\n"].includes(char) &&
+				[" ", "\n"].includes(newValue[i - 1])
+			)
 				wordWidth = getWordWidth(newValue, i);
-			if(char === '\n' || (length + wordWidth > page.areaLength[name] && Math.ceil(wordWidth) < page.areaLength[name])) {
+			if (
+				char === "\n" ||
+				(length + wordWidth > page.areaLength[name] &&
+					Math.ceil(wordWidth) < page.areaLength[name])
+			) {
 				++newLines;
 				length = 4;
-				_value += '\n';
+				_value += "\n";
 			}
-			if(characters[char]) {
+			if (characters[char]) {
 				newContent.push({
 					char: characters[char].image,
 					style: {
@@ -83,7 +90,7 @@ const HandwritingGenerator = () => {
 					},
 				});
 				_value += char;
-				length += widths[char];	
+				length += widths[char];
 			}
 			++i;
 		}
@@ -95,8 +102,7 @@ const HandwritingGenerator = () => {
 	};
 
 	const handleInput = ({ target: { value, name } }) => {
-		if(isNaN(widths[' '])) 
-			return window.location.reload();
+		if (isNaN(widths[" "])) return window.location.reload();
 		updatePage({ content: [] });
 		let newValue = [...value];
 		newValue = newValue.filter(
@@ -124,39 +130,63 @@ const HandwritingGenerator = () => {
 
 	return (
 		<div className="container">
-			<div className="selectPageType">
-				<label htmlFor="pageType">Page Type</label>
-				<select
-					value={page.type}
-					onChange={({ target: { value } }) => switchPageType(value)}
-					name="pageType"
-				>
-					<option value="ruled">Ruled Paper</option>
-					<option value="unruled">Unruled Paper</option>
-				</select>
+			<div className="pageOptions">
+				<div>
+					<label htmlFor="brightness">Page Brightness</label>
+					<input
+						type="range"
+						name='brightness'
+						min={0}
+						max={0.5}
+						step={0.01}
+						value={brightness}
+						onChange={({ target: { value } }) =>
+							setBrightness(value)
+						}
+					/>
+				</div>
+				<div className="selectPageType">
+					<label htmlFor="pageType">Page Type</label>
+					<select
+						value={page.type}
+						onChange={({ target: { value } }) =>
+							switchPageType(value)
+						}
+						name="pageType"
+					>
+						<option value="ruled">Ruled</option>
+						<option value="unruled">Unruled</option>
+					</select>
+				</div>
 			</div>
-			<div className="page-container">
-				<div
-					className='page'
-					style={{
-						...page.pageStyle,
-						backgroundImage: `url(/characters/${page.type}.png)`,
-					}}
-					ref={pageRef}
-				>
-					{Object.keys(page.content).map((type) => {
-						return (
-							<PageArea
-								content={page.content[type]}
-								type={type}
-								blink={blink}
-								key={type}
-							/>
-						);
-					})}
+			<div className="main-container">
+				<div className="page-container">
+					<div
+						className="brightness"
+						style={{ opacity: brightness }}
+					></div>
+					<div
+						className="page"
+						style={{
+							...page.pageStyle,
+							backgroundImage: `url(/characters/${page.type}.png)`,
+						}}
+						ref={pageRef}
+					>
+						{Object.keys(page.content).map((type) => {
+							return (
+								<PageArea
+									content={page.content[type]}
+									type={type}
+									blink={blink}
+									key={type}
+								/>
+							);
+						})}
+					</div>
 				</div>
 				<form>
-					<div className='textAreas' style={page.textAreaStyle}>
+					<div className="textAreas" style={page.textAreaStyle}>
 						{Object.keys(page.input).map((type) => {
 							return (
 								<textarea

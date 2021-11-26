@@ -67,9 +67,11 @@ export const saveSnapshot = (element) => {
 	toPng(element, snapshotOptions)
 		.then((url) => {
 			const link = document.createElement("a");
-			link.download = "snapshot.png";
-			link.href = url;
-			link.click();
+			if(window.confirm('Download the page snapshot?')) {
+				link.download = "snapshot.png";
+				link.href = url;
+				link.click();
+			}
 		})
 		.catch((err) => {});
 };

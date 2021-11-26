@@ -1,10 +1,12 @@
 .container {
-	.selectPageType {
-		text-align: center;
-		margin: auto;
+	.pageOptions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		column-gap: 3rem;
 		label {
 			color: white;
-			font-family: 'Segoe UI';
+			font-family: "Segoe UI";
 			margin: 0px 0.5rem;
 		}
 		select {
@@ -20,11 +22,18 @@
 			}
 		}
 	}
-	.page-container {
+	.main-container {
 		display: grid;
 		grid-template-columns: 500px auto;
 		gap: 1rem;
 		padding: 1rem;
+		position: relative;
+		.brightness {
+			height: 701.5px;
+			width: 500px;
+			position: absolute;
+			background: black;
+		}
 		.page {
 			width: 500px;
 			height: 701.5px;
@@ -38,6 +47,7 @@
 				position: relative;
 				overflow: hidden;
 				padding: 0px 4px;
+				width: 100%;
 			}
 			.blink {
 				display: inline-block;
@@ -110,8 +120,8 @@
 	}
 }
 @media (min-width: 512px) and (max-width: 1048px) {
-	.container {
-		grid-template-columns: 100%;
+	.main-container {
+		grid-template-columns: 100% !important;
 	}
 }
 @media (min-width: 0px) and (max-width: 556px) {
