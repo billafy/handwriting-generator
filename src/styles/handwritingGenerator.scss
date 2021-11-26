@@ -61,15 +61,6 @@
 				}
 			}
 		}
-		.ruled {
-			grid-template-columns: 70px 425px;
-			grid-template-rows: 70px 632px;
-		}
-		.unruled {
-			grid-template-columns: 484px;
-			grid-template-rows: 685.5px;
-			padding: 8px;
-		}
 		form {
 			height: 701.5px;
 			padding: 0px 0.5rem;
@@ -114,14 +105,6 @@
 						border-width: 3px;
 					}
 				}
-			}
-			.ruledTextAreas {
-				grid-template-columns: 20% 80%;
-				grid-template-rows: 15% 85%;
-			}
-			.unruledTextAreas {
-				grid-template-columns: 1fr;
-				grid-template-rows: 1fr;
 			}
 		}
 	}
