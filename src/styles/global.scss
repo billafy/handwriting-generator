@@ -10,6 +10,9 @@ select, a, input {
 	outline: none;
 	cursor: pointer;
 }
+img {
+	pointer-events: none;
+}
 ::-webkit-scrollbar {
 	width: 5px;
 }
