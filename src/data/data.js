@@ -131,7 +131,7 @@ export const pages = {
 			body: "",
 		},
 		areaLength: {
-			body: 496,
+			body: 484,
 		},
 		stats: {
 			body: { length: 4, newLines: 0 },
