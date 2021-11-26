@@ -112,8 +112,9 @@ const HandwritingGenerator = () => {
 			</div>
 			<div className="page-container">
 				<div
-					className={`page ${page.type}`}
+					className='page'
 					style={{
+						...page.pageStyle,
 						backgroundImage: `url(/characters/${page.type}.png)`,
 					}}
 					ref={pageRef}
@@ -130,7 +131,7 @@ const HandwritingGenerator = () => {
 					})}
 				</div>
 				<form>
-					<div className={`textAreas ${page.type}TextAreas`}>
+					<div className='textAreas' style={page.textAreaStyle}>
 						{Object.keys(page.input).map((type) => {
 							return (
 								<textarea

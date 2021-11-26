@@ -121,6 +121,14 @@ export const pages = {
 			margin: { length: 4, newLines: 0 },
 			body: { length: 4, newLines: 0 },
 		},
+		pageStyle: {
+			gridTemplateColumns: '70px 425px',
+			gridTemplateRows: '70px 632px',
+		},
+		textAreaStyle: {
+			gridTemplateColumns: '20% 80%',
+			gridTemplateRows: '15% 85%',
+		}
 	},
 	unruled: {
 		type: 'unruled',
@@ -136,5 +144,13 @@ export const pages = {
 		stats: {
 			body: { length: 4, newLines: 0 },
 		},
+		pageStyle: {
+			gridTemplateColumns: '500px',
+			gridTemplateRows: '701.5px',
+		},
+		textAreaStyle: {
+			gridTemplateColumns: '1fr',
+			gridTemplateRows: '1fr',
+		}
 	},
 };
