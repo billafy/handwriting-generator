@@ -1,6 +1,6 @@
 # Handwriting Generator
 
-A title is self-explanatory. This application generates handwritten characters on a notebook page which you can save as an image.
+The title is self-explanatory. This application generates handwritten characters on a notebook page which you can save as an image.
 
 ### File structure
 
