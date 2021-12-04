@@ -6,6 +6,7 @@ import {
 	saveSnapshot,
 	getDummyContent,
 	getTopOffset,
+	randomInt,
 } from "../utils/utils";
 import { characterList, pages } from "../data/data";
 import PageArea from "./PageArea";
@@ -48,11 +49,11 @@ const HandwritingGenerator = () => {
 		});
 	};
 
-	const getWordWidth = (value, i) => {
+	const getWordWidth = (value, i, index) => {
 		let width = 0;
 		while (i < value.length) {
 			if (value[i] === "\n" || value[i] === " ") break;
-			width += widths[value[i++]];
+			width += widths[value[i++]][index];
 		}
 		return width;
 	};
@@ -66,11 +67,12 @@ const HandwritingGenerator = () => {
 		while (i < newValue.length) {
 			const char = newValue[i];
 			let wordWidth = 0;
+			const index = char === '\n' || randomInt(0, characters[char].length);
 			if (
 				![" ", "\n"].includes(char) &&
 				[" ", "\n"].includes(newValue[i - 1])
 			)
-				wordWidth = getWordWidth(newValue, i);
+				wordWidth = getWordWidth(newValue, i, index);
 			if (
 				char === "\n" ||
 				(length + wordWidth > page.areaLength[name] &&
@@ -82,15 +84,15 @@ const HandwritingGenerator = () => {
 			}
 			if (characters[char]) {
 				newContent.push({
-					char: characters[char].image,
+					char: characters[char][index].image,
 					style: {
-						...characters[char].style,
-						top: getTopOffset(characters[char], newLines),
+						...characters[char][index].style,
+						top: getTopOffset(characters[char][index], newLines),
 						left: `${length}px`,
 					},
 				});
 				_value += char;
-				length += widths[char];
+				length += widths[char][index];
 			}
 			++i;
 		}
@@ -121,10 +123,17 @@ const HandwritingGenerator = () => {
 	};
 
 	useEffect(() => {
-		let newWidths = {};
-		Object.keys(characters).forEach((char, i) => {
-			newWidths[char] = contentRef.current[i];
-		});
+		const chars = Object.keys(characters);
+		let newWidths = {}, i = 0, j = 0;
+		while(i < chars.length) {
+			let k = characters[chars[i]].length;
+			newWidths[chars[i]] = [];
+			while(k > 0) {
+				newWidths[chars[i]].push(contentRef.current[j++]);
+				--k;
+			}
+			++i;
+		}
 		setWidths(newWidths);
 	}, []);
 

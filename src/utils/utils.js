@@ -18,16 +18,17 @@ const characterStyles = {
 export const getCharacters = () => {
 	const characterMap = {};
 	Object.keys(characterList).forEach((character) => {
-		characterMap[character] = {
-			image: `/characters/${characterList[character].filename}.png`,
-			style: {
-				...characterStyles,
-				top: `${
-					characterTopOffset +
-					(characterList[character].topOffset || 0)
-				}px`,
-			},
-		};
+		const char = characterList[character];
+		characterMap[character] = [];
+		for (let i = 0; i < char.copies; ++i) {
+			characterMap[character].push({
+				image: `/characters/${char.filename}-${i + 1}.png`,
+				style: {
+					...characterStyles,
+					top: `${characterTopOffset + (char.topOffset || 0)}px`,
+				},
+			});
+		}
 	});
 	return characterMap;
 };
@@ -35,13 +36,16 @@ export const getCharacters = () => {
 export const getDummyContent = () => {
 	const dummyContent = [];
 	Object.keys(characterList).forEach((character) => {
-		dummyContent.push({
-			char: `/characters/${characterList[character].filename}.png`,
-			style: {
-				...characterStyles,
-				visibility: "hidden",
-			},
-		});
+		const char = characterList[character];
+		for (let i = 0; i < char.copies; ++i) {
+			dummyContent.push({
+				char: `/characters/${char.filename}-${i + 1}.png`,
+				style: {
+					...characterStyles,
+					visibility: "hidden",
+				},
+			});
+		}
 	});
 	return dummyContent;
 };
@@ -67,7 +71,7 @@ export const saveSnapshot = (element) => {
 	toPng(element, snapshotOptions)
 		.then((url) => {
 			const link = document.createElement("a");
-			if(window.confirm('Download the page snapshot?')) {
+			if (window.confirm("Download the page snapshot?")) {
 				link.download = "snapshot.png";
 				link.href = url;
 				link.click();
@@ -81,4 +85,8 @@ export const saveSnapshot = (element) => {
 export const capitalize = (s) => {
 	if (!s || !s[0]) return s;
 	return `${s[0].toUpperCase()}${s.slice(1, s.length)}`;
+};
+
+export const randomInt = (max, min) => {
+	return Math.floor(Math.random() * (max - min)) + min;
 };
