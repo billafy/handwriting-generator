@@ -19,6 +19,11 @@ const AppProvider = ({ children }) => {
 	const [backupPage, setBackupPage] = useState(pages["unruled"]);
 	const [brightness, setBrightness] = useState(0);
 
+	/* updates the page content (what you see on the page image), 
+	input (textarea) or 
+	stats (length of content and number of new lines)
+	*/
+
 	const updatePage = (
 		newPage = {
 			content: page.content,
@@ -32,11 +37,18 @@ const AppProvider = ({ children }) => {
 		});
 	};
 
+	/* calculates the total width taken by the given word 
+	value = whole content
+	i = index where the width of content will be started measuring
+	index = index of the character copy used in the character list
+	*/
+
 	const getWordWidth = (value, i, index) => {
 		let width = 0;
 		while (i < value.length) {
 			if (value[i] === "\n" || value[i] === " ") break;
-			width += widths[value[i++]][index];
+			width += widths[value[i]][index] || widths[value[i]][0];
+			++i;
 		}
 		return width;
 	};
@@ -57,6 +69,7 @@ const AppProvider = ({ children }) => {
 				[" ", "\n"].includes(newValue[i - 1])
 			)
 				wordWidth = getWordWidth(newValue, i, index);
+			/* if word is overflowing out of the page area width, shift it to new line */
 			if (
 				char === "\n" ||
 				(length + wordWidth > page.areaLength[name] &&
@@ -116,6 +129,7 @@ const AppProvider = ({ children }) => {
 		setBackupPage(prevPage);
 	};
 
+	/* measuring the widths of every character beforehand */
 	useEffect(() => {
 		const chars = Object.keys(characters);
 		let newWidths = {},
