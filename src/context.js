@@ -101,7 +101,6 @@ const AppProvider = ({ children }) => {
 	};
 
 	const handleInput = ({ target: { value, name } }) => {
-		if (isNaN(widths[" "])) return window.location.reload();
 		updatePage({ content: [] });
 		let newValue = [...value];
 		newValue = newValue.filter(
@@ -136,6 +135,8 @@ const AppProvider = ({ children }) => {
 			i = 0,
 			j = 0;
 		while (i < chars.length) {
+			if(!contentRef.current[j]) 
+				window.location.reload();
 			let k = characters[chars[i]].length;
 			newWidths[chars[i]] = [];
 			while (k > 0) {
